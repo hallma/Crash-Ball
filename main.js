@@ -1,3 +1,3 @@
 (function (){
-	// platform("platform", 500, 500);
+	//platform("platform", 500, 500);
 })();

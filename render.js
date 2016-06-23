@@ -12,13 +12,17 @@ function platform(divId, frameWidth, frameHeight) {
 	var ballSpeedY = 3;
 	var playerX = (frameWidth / 2) - (rectWidth / 2)
 	var playerY = 450;
-	var playerSpeedX = 3;
-	var playerSpeedY = 0;
-
+	window.playerSpeedX = 3;
+	window.playerSpeedY = 0;
+	registrateKeyEvents();
 	setInterval(function() {
 			ctx.clearRect(0, 0, frameWidth, frameHeight);
 			ballCoords = moveBall(ballX, ballY, ballSpeedX, ballSpeedY, frameWidth, frameHeight, ballR);
-			playerCoords = movePlayer(playerX, playerY, playerSpeedX, playerSpeedY, rectWidth, rectHeight, frameWidth, frameHeight);
+			playerCoords = movePlayer(playerX, playerY, rectWidth, rectHeight, frameWidth, frameHeight);
+			// playerBallCollision(playerX, playerY, playerWidth, playerHeight, ballX, ballY, ballR, ballSpeedX, ballSpeedY);
+			// drawBrick(ctx, x, y, width, height);
+			// drawBricks(ctx, bricks);
+			// ballBricksCollision(bricks, ballX, ballY, ballR, ballSpeedX, ballSpeedY);
 			drawBall(ctx, ballCoords['x'], ballCoords['y'], ballR);
 			ballX = ballCoords['x'];
 			ballY = ballCoords['y'];
@@ -27,8 +31,6 @@ function platform(divId, frameWidth, frameHeight) {
 			drawPlayer(ctx, playerCoords['x'], playerCoords['y'], rectWidth, rectHeight);
 			playerX = playerCoords['x'];
 			playerY = playerCoords['y'];
-			playerSpeedX = playerCoords['speedX'];
-			playerSpeedY = playerCoords['speedY'];
 	}, 30);
 }
 
@@ -52,27 +54,16 @@ function moveBall(x, y, speedX, speedY, frameWidth, frameHeight, ballRadius) {
 	};
 }
 
-function movePlayer(x, y, speedX, speedY, rectWidth, rectHeight, frameWidth, frameHeight) {
-	document.addEventListener("keydown", function(event) {
-	  	if (event.which ==  37  && speedX > 0 ) {
-	  		speedX *= -1;
-	  	}
-	  	else if (event.which == 39 && speedX < 0) {
-	  		speedX *= -1;
-	  	}
-	});
-
+function movePlayer(x, y, rectWidth, rectHeight, frameWidth, frameHeight) {
 	if (x > (frameWidth - rectWidth) || x < 0) {
-		speedX *= -1;
+		window.playerSpeedX *= -1;
 	};
 
-	x += speedX;
+	x += window.playerSpeedX;
 	
 	return {
 		x: x,
-		y: y,
-		speedX: speedX,
-		speedY: speedY
+		y: y
 	};
 }
 
@@ -92,3 +83,43 @@ function drawPlayer(ctx, x, y, width, height) {
 	ctx.stroke();
 };
 
+function drawBrick(ctx, x, y, width, height) {
+};
+
+function drawBricks(ctx, bricks) {
+	for (var i = 0; i < bricks.length - 1; i++) {
+		drawBrick(ctx, bricks[i].x, bricks[i].y, bricks[i].speedX, bricks[i].speedY);
+	}
+};
+
+// Checking collisions
+function playerBallCollision(playerX, playerY, playerWidth, playerHeight, ballX, ballY, ballR, ballSpeedX, ballSpeedY) {
+	// the logic for collisions and change of the speed
+	return {
+		ballSpeedX: ballSpeedX,
+		ballSpeedY: ballSpeedY
+	}
+}
+
+function ballBricksCollision(bricks, ballX, ballY, ballR, ballSpeedX, ballSpeedY) {
+	// the logic for collisions, delete bricks, and change the speed of the ball
+	for (var i = bricks.length - 1; i >= 0; i--) {
+		newBallSpeed = ballBrickCollision(); // delete logic
+	}
+	return {
+		ballSpeedX: ballSpeedX,
+		ballSpeedY: ballSpeedY
+	}
+}
+
+// Keys events
+function registrateKeyEvents() {
+	document.addEventListener("keydown", function(event) {
+	  	if (event.which ==  37  && window.playerSpeedX > 0 ) {
+	  		window.playerSpeedX *= -1;
+	  	}
+	  	else if (event.which == 39 && window.playerSpeedX < 0) {
+	  		window.playerSpeedX *= -1;
+	  	}
+	});
+}

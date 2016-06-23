@@ -19,7 +19,7 @@ function platform(divId, frameWidth, frameHeight) {
 			ctx.clearRect(0, 0, frameWidth, frameHeight);
 			ballCoords = moveBall(ballX, ballY, ballSpeedX, ballSpeedY, frameWidth, frameHeight, ballR);
 			playerCoords = movePlayer(playerX, playerY, rectWidth, rectHeight, frameWidth, frameHeight);
-			// playerBallCollision(playerX, playerY, playerWidth, playerHeight, ballX, ballY, ballR, ballSpeedX, ballSpeedY);
+			ballCoords = playerBallCollision(playerX, playerY, rectWidth, rectHeight, ballCoords['x'], ballCoords['y'], ballR, ballCoords['speedX'], ballCoords['speedY']);
 			// drawBrick(ctx, x, y, width, height);
 			// drawBricks(ctx, bricks);
 			// ballBricksCollision(bricks, ballX, ballY, ballR, ballSpeedX, ballSpeedY);
@@ -95,9 +95,18 @@ function drawBricks(ctx, bricks) {
 // Checking collisions
 function playerBallCollision(playerX, playerY, playerWidth, playerHeight, ballX, ballY, ballR, ballSpeedX, ballSpeedY) {
 	// the logic for collisions and change of the speed
+
+	// if (((playerX + playerWidth) == (ballX + ballR)) || (playerY + playerHeight) == (ballY + ballR)) {
+	if ((ballY + ballR) >= (playerY - playerHeight) && (ballX + ballR) >= (playerX) && (ballX - ballR) <= (playerX + playerWidth / 2)) {
+	
+		
+		ballSpeedY *= -1;
+	}
 	return {
-		ballSpeedX: ballSpeedX,
-		ballSpeedY: ballSpeedY
+		x: ballX,
+		y: ballY,
+		speedX: ballSpeedX,
+		speedY: ballSpeedY
 	}
 }
 
